@@ -1,0 +1,30 @@
+1,1
+pow((sqrt(3)*a*sin(alpha)*sin(beta) + (sqrt(3)*a*cos(beta)*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) - (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi))/(2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi)),2)/pow(Zi,2) + pow((2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) - (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi),2)/pow((2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(beta)*cos(alpha)*sin(gama))))/Zi),2) + 1
+
+1,2
+2*b + (2*(sqrt(3)*a*b*sin(alpha)*sin(beta) - (sqrt(3)*a*cos(beta)*(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) + (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi - 4787512558085367/68719476736))/(2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi))*(sqrt(3)*a*sin(alpha)*sin(beta) + (sqrt(3)*a*cos(beta)*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) - (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi))/(2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi)))/pow(Zi,2) - (2*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) - (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi)*(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) + (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi - 4787512558085367/68719476736))/pow((2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(beta)*cos(alpha)*sin(gama))))/Zi),2)
+
+1,3
+pow(b,2) + pow((pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) + (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi - 4787512558085367/68719476736),2)/pow((2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(beta)*cos(alpha)*sin(gama))))/Zi),2) + pow((sqrt(3)*a*b*sin(alpha)*sin(beta) - (sqrt(3)*a*cos(beta)*(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) + (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi - 4787512558085367/68719476736))/(2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi)),2)/pow(Zi,2) - 3844
+
+1,4
+-(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) - Yc1*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) - (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) + (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi - 4787512558085367/68719476736)/(2*a*sin(beta)*sin(gama) - 2*X0 + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/Zi)
+
+1,5
+-(sqrt(3)*Xc1*a*cos(beta) + sqrt(3)*Yc1*a*sin(alpha)*sin(beta) + sqrt(3)*a*b*sin(alpha)*sin(beta))/Zi
+
+1,6
+matrix([[Xc1, Yc1 + b, Zc1]])
+
+2,1
+matrix([[sqrt(3)*a*cos(beta), sqrt(3)*a*sin(alpha)*sin(beta), -sqrt(3)*a*cos(alpha)*sin(beta)]])
+
+2,2
+matrix([[Xc1 - X0 + a*sin(beta)*sin(gama), Yc1 - Y0 + a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)), Zc1 - Z0 + a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))]])
+
+2,3
+先替换sqrt(3)  再找 ^ 然后替换 ^2
+
+Zi = -sqrt(3)*a*cos(alpha)*sin(beta);
+
+1.616  y = -141.979  z = -0.012

@@ -1,0 +1,13 @@
+<!-- saved from url=(0014)about:internet -->
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="1,1" id="srcline1"> 1</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,2" id="srcline2"> 2</a></span><span class="line"><span class="keyword">function</span> [ <span class="var type0" id="S2T0U3">D</span> ] = clc_libi(<span class="var type1" id="S3T1U6">R</span>,<span class="var type1" id="S4T3U7">L</span>)</span></span>
+<span class="srcline"><span class="lineno"><a href="1,3" id="srcline3"> 3</a></span><span class="line"><span class="comment">%传入力的作用点坐标 与 要对点取距的点坐标  返回力臂</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,4" id="srcline4"> 4</a></span><span class="line"><span class="var type0" id="S5T0U10">dx</span> = sqrt((<span class="message error" id="M1F1C"><span class="var type1" id="S4T3U18">L</span>(2)</span>-<span class="var type0" id="S3T0U21">R</span>(2)).^2+(<span class="var type0" id="S4T0U28">L</span>(3)-<span class="var type0" id="S3T0U31">R</span>(3)).^2);</span></span>
+<span class="srcline"><span class="lineno"><a href="1,5" id="srcline5"> 5</a></span><span class="line"><span class="var type0" id="S7T0U36">dy</span> = sqrt((<span class="message error" id="M2F1C"><span class="var type1" id="S4T3U44">L</span>(1)</span>-<span class="var type0" id="S3T0U47">R</span>(1)).^2+(<span class="var type0" id="S4T0U54">L</span>(3)-<span class="var type0" id="S3T0U57">R</span>(3)).^2);</span></span>
+<span class="srcline"><span class="lineno"><a href="1,6" id="srcline6"> 6</a></span><span class="line"><span class="var type0" id="S8T0U62">dz</span> = sqrt((<span class="message error" id="M3F1C"><span class="var type1" id="S4T3U70">L</span>(1)</span>-<span class="var type0" id="S3T0U73">R</span>(1)).^2+(<span class="var type0" id="S4T0U80">L</span>(2)-<span class="var type0" id="S3T0U83">R</span>(2)).^2);</span></span>
+<span class="srcline"><span class="lineno"><a href="1,7" id="srcline7"> 7</a></span><span class="line"><span class="var type0" id="S2T0U88">D</span> = [<span class="var type0" id="S5T0U91"><span class="message error" id="M4F1C">dx</span></span>,<span class="var type0" id="S7T0U92">dy</span>,<span class="var type0" id="S8T0U93">dz</span>];</span></span>
+<span class="srcline"><span class="lineno"><a href="1,8" id="srcline8"> 8</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,9" id="srcline9"> 9</a></span><span class="line"><span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,10" id="srcline10">10</a></span><span class="line"></span></span>
+</pre>

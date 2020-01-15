@@ -1,0 +1,130 @@
+a=41.54;
+b=75.7484;
+RP=[];%将所有求得的动平台中心点坐标合并成此矩阵，每一行是一个XYZ坐标
+for q1=200:5:250
+    for q2=200:5:250
+        for q3=200:5:250
+            R=[q1,q2,q3]
+%正解初值
+  XO1=200;
+  YO1=200;
+  ZO1=100;
+  PSI=0;
+  THETA=0;
+  %x=[xo1;yo1;zo1;psi;theta];
+%精度初值
+delta_l=[1;1;1];
+delta_d=[1;1];
+while (delta_l>1e-9)|(delta_d>(0.001*(pi/180)))
+%存储迭代初值
+xo1=XO1;
+yo1=YO1;
+zo1=ZO1;
+psi=PSI;
+theta=THETA;
+f1=(xo1^2+yo1^2+zo1^2)+a^2+b^2-q1^2 ...
+   +(2*a*xo1-2*a*b)*(cos(psi)*cos(-psi)-sin(psi)*sin(-psi)*cos(theta))+2*a*yo1*(sin(psi)*cos(-psi)+cos(psi)*sin(-psi)*cos(theta))+2*a*zo1*sin(-psi)*sin(theta)-2*b*xo1; 
+f3=(xo1^2+yo1^2+zo1^2)+a^2+b^2-q2^2 ...
+   +(a*xo1+a*b*(1/2))*(-cos(psi)*cos(-psi)+sin(psi)*sin(-psi)*cos(theta)-sqrt(3)*sin(-psi)*cos(psi)-sqrt(3)*sin(psi)*cos(-psi)*cos(theta))...
+   +(a*yo1-sqrt(3)*a*b*(1/2))*(-sin(psi)*cos(-psi)-sin(-psi)*cos(psi)*cos(theta)-sqrt(3)*sin(psi)*sin(-psi)+sqrt(3)*cos(psi)*cos(-psi)*cos(theta))...
+   +a*zo1*(-sin(-psi)*sin(theta)+sqrt(3)*cos(-psi)*sin(theta))+b*xo1-sqrt(3)*b*yo1;
+f2=(xo1^2+yo1^2+zo1^2)+a^2+b^2-q3^2 ...
+   +(a*xo1+a*b*(1/2))*(-cos(psi)*cos(-psi)+sin(psi)*sin(-psi)*cos(theta)+sqrt(3)*sin(-psi)*cos(psi)+sqrt(3)*sin(psi)*cos(-psi)*cos(theta))...
+   +(a*yo1+sqrt(3)*a*b*(1/2))*(-sin(psi)*cos(-psi)-sin(-psi)*cos(psi)*cos(theta)+sqrt(3)*sin(psi)*sin(-psi)-sqrt(3)*cos(-psi)*cos(psi)*cos(theta))...
+   +a*zo1*(-sin(-psi)*sin(theta)-sqrt(3)*cos(-psi)*sin(theta))+b*xo1+sqrt(3)*b*yo1;
+f4=xo1*cos(psi)+yo1*sin(psi)+(1/2)*b*cos(3*psi)*(1-cos(theta));
+f5=xo1*sin(psi)*cos(theta)-yo1*cos(psi)*cos(theta)-zo1*sin(theta)+(1/2)*b*sin(3*psi)*(1-cos(theta));
+%f4=(sin(psi)*cos(-psi)+cos(psi)*cos(theta)*sin(-psi))*a*(-b)*zo1+sin(theta)*sin(-psi)*a*b*yo1;
+%f5=(-1/2*(cos(psi)*cos(-psi)-sin(psi)*cos(theta)*sin(-psi))*a+1/2*(-cos(psi)*sin(-psi)-sin(psi)*cos(theta)*cos(-psi))*a*3^(1/2))*(3^(1/2)*(1/2)*b*zo1)+...
+     %(-1/2*(sin(psi)*cos(-psi)+cos(psi)*cos(theta)*sin(-psi))*a+1/2*(-sin(psi)*sin(-psi)+cos(psi)*cos(theta)*cos(-psi))*a*3^(1/2))*((1/2)*b*zo1)+...
+     %(-1/2*sin(theta)*sin(-psi)*a+1/2*sin(theta)*cos(-psi)*a*3^(1/2))*(-(1/2)*b*yo1-3^(1/2)*(1/2)*b*xo1);
+f1_xo1=2*xo1+2*a*(cos(psi)^2+sin(psi)^2*cos(theta))-2*b;
+f1_yo1=2*yo1+2*a*sin(psi)*cos(psi)*(1-cos(theta));
+f1_zo1=2*zo1-2*a*sin(psi)*sin(theta);
+f1_psi=(2*a*xo1-2*a*b)*(-2*sin(psi)*cos(psi)+2*sin(psi)*cos(psi)*cos(theta))+2*a*yo1*cos(psi)^2*(1-cos(theta))-2*a*yo1*sin(psi)^2*(1-cos(theta))-2*a*zo1*cos(psi)*sin(theta);
+f1_theta=-(2*a*xo1-2*a*b)*sin(psi)^2*sin(theta)+2*a*yo1*sin(psi)*cos(psi)*sin(theta)-2*a*zo1*sin(psi)*cos(theta); 
+f3_xo1=2*xo1+a*(-cos(psi)^2-sin(psi)^2*cos(theta)+3^(1/2)*sin(psi)*cos(psi)-3^(1/2)*sin(psi)*cos(psi)*cos(theta))+b;
+f3_yo1=2*yo1+a*(-sin(psi)*cos(psi)+sin(psi)*cos(psi)*cos(theta)+3^(1/2)*sin(psi)^2+3^(1/2)*cos(psi)^2*cos(theta))-3^(1/2)*b;
+f3_zo1=2*zo1+a*(sin(psi)*sin(theta)+3^(1/2)*cos(psi)*sin(theta));
+f3_psi=(a*xo1+1/2*a*b)*(2*sin(psi)*cos(psi)-2*sin(psi)*cos(psi)*cos(theta)+3^(1/2)*cos(psi)^2-3^(1/2)*sin(psi)^2-3^(1/2)*cos(psi)^2*cos(theta)+3^(1/2)*sin(psi)^2*cos(theta))+(a*yo1-1/2*3^(1/2)*a*b)*(-cos(psi)^2+sin(psi)^2+cos(psi)^2*cos(theta)-sin(psi)^2*cos(theta)+2*3^(1/2)*sin(psi)*cos(psi)-2*3^(1/2)*sin(psi)*cos(psi)*cos(theta))+a*zo1*(cos(psi)*sin(theta)-3^(1/2)*sin(psi)*sin(theta));
+f3_theta=(a*xo1+1/2*a*b)*(sin(psi)^2*sin(theta)+3^(1/2)*sin(psi)*cos(psi)*sin(theta))+(a*yo1-1/2*3^(1/2)*a*b)*(-sin(psi)*cos(psi)*sin(theta)-3^(1/2)*cos(psi)^2*sin(theta))+a*zo1*(sin(psi)*cos(theta)+3^(1/2)*cos(psi)*cos(theta));
+f2_xo1=2*xo1+a*(-cos(psi)^2-sin(psi)^2*cos(theta)-3^(1/2)*sin(psi)*cos(psi)+3^(1/2)*sin(psi)*cos(psi)*cos(theta))+b;
+f2_yo1=2*yo1+a*(-sin(psi)*cos(psi)+sin(psi)*cos(psi)*cos(theta)-3^(1/2)*sin(psi)^2-3^(1/2)*cos(psi)^2*cos(theta))+3^(1/2)*b;
+f2_zo1=2*zo1+a*(sin(psi)*sin(theta)-3^(1/2)*cos(psi)*sin(theta));
+f2_psi=(a*xo1+1/2*a*b)*(2*sin(psi)*cos(psi)-2*sin(psi)*cos(psi)*cos(theta)-3^(1/2)*cos(psi)^2+3^(1/2)*sin(psi)^2+3^(1/2)*cos(psi)^2*cos(theta)-3^(1/2)*sin(psi)^2*cos(theta))+(a*yo1+1/2*3^(1/2)*a*b)*(-cos(psi)^2+sin(psi)^2+cos(psi)^2*cos(theta)-sin(psi)^2*cos(theta)-2*3^(1/2)*sin(psi)*cos(psi)+2*3^(1/2)*sin(psi)*cos(psi)*cos(theta))+a*zo1*(cos(psi)*sin(theta)+3^(1/2)*sin(psi)*sin(theta));
+f2_theta=(a*xo1+1/2*a*b)*(sin(psi)^2*sin(theta)-3^(1/2)*sin(psi)*cos(psi)*sin(theta))+(a*yo1+1/2*3^(1/2)*a*b)*(-sin(psi)*cos(psi)*sin(theta)+3^(1/2)*cos(psi)^2*sin(theta))+a*zo1*(sin(psi)*cos(theta)-3^(1/2)*cos(psi)*cos(theta));
+f4_xo1=cos(psi);
+f4_yo1=sin(psi);                                                                                   
+f4_zo1=0;                           
+f4_psi=-xo1*sin(psi)+yo1*cos(psi)-3/2*b*sin(3*psi)*(1-cos(theta));                                                    
+f4_theta=1/2*b*cos(3*psi)*sin(theta);
+f5_xo1=sin(psi)*cos(theta);                                              
+f5_yo1=-cos(psi)*cos(theta);                                            
+f5_zo1=-sin(theta);      
+f5_psi=xo1*cos(psi)*cos(theta)+yo1*sin(psi)*cos(theta)+3/2*b*cos(3*psi)*(1-cos(theta));
+f5_theta=-xo1*sin(psi)*sin(theta)+yo1*cos(psi)*sin(theta)-zo1*cos(theta)+1/2*b*sin(3*psi)*sin(theta);
+    
+    %f1_xo1=2*xo1+2*a*(cos(psi)^2+sin(psi)^2*cos(theta))-2*b;
+    %f1_yo1=2*yo1+2*(sin(psi)*cos(psi)-sin(psi)*cos(psi)*cos(theta))*a;     
+    %f1_zo1=2*zo1-2*sin(psi)*sin(theta)*a;  
+    %f1_psi=(2*a*xo1-2*a*b)*(-2*sin(psi)*cos(psi)+2*sin(psi)*cos(psi)*cos(theta))+2*a*yo1*(cos(psi)^2-sin(psi)^2-cos(psi)^2*cos(theta)+sin(psi)^2*cos(theta))-2*a*zo1*cos(psi)*sin(theta);      
+    %f1_theta=-(2*a*xo1-2*a*b)*sin(psi)^2*sin(theta)+2*a*yo1*sin(psi)*cos(psi)*sin(theta)-2*a*zo1*sin(psi)*cos(theta);   
+    %f2_xo1=2*xo1+a*(-cos(psi)^2-sin(psi)^2*cos(theta)+3^(1/2)*sin(psi)*cos(psi)-3^(1/2)*sin(psi)*cos(psi)*cos(theta))+b; 
+    %f2_yo1=2*yo1+a*(-sin(psi)*cos(psi)+sin(psi)*cos(psi)*cos(theta)+3^(1/2)*sin(psi)^2+3^(1/2)*cos(psi)^2*cos(theta))-3^(1/2)*b;
+    %f2_zo1=2*zo1+a*(sin(psi)*sin(theta)+3^(1/2)*cos(psi)*sin(theta));                         
+    %f2_psi=(a*xo1+1/2*a*b)*(2*sin(psi)*cos(psi)-2*sin(psi)*cos(psi)*cos(theta)+3^(1/2)*cos(psi)^2-3^(1/2)*sin(psi)^2-3^(1/2)*cos(psi)^2*cos(theta)+3^(1/2)*sin(psi)^2*cos(theta))+(a*yo1-1/2*3^(1/2)*a*b)*(-cos(psi)^2+sin(psi)^2+cos(psi)^2*cos(theta)-sin(psi)^2*cos(theta)+2*3^(1/2)*sin(psi)*cos(psi)-2*3^(1/2)*sin(psi)*cos(psi)*cos(theta))+a*zo1*(sin(theta)*cos(psi)-3^(1/2)*sin(psi)*sin(theta));  
+    %f2_theta=(a*xo1+1/2*a*b)*(sin(psi)^2*sin(theta)+3^(1/2)*sin(psi)*cos(psi)*sin(theta))+(a*yo1-1/2*3^(1/2)*a*b)*(-sin(psi)*cos(psi)*sin(theta)-3^(1/2)*cos(psi)^2*sin(theta))+a*zo1*(sin(psi)*cos(theta)+3^(1/2)*cos(psi)*cos(theta));
+    %f3_xo1=2*xo1+a*(-cos(psi)^2-sin(psi)^2*cos(theta)-3^(1/2)*sin(psi)*cos(psi)+3^(1/2)*sin(psi)*cos(psi)*cos(theta))+b;
+    %f3_yo1=2*yo1+a*(-sin(psi)*cos(psi)+sin(psi)*cos(psi)*cos(theta)-3^(1/2)*sin(psi)^2-3^(1/2)*cos(psi)^2*cos(theta))+3^(1/2)*b; 
+    %f3_zo1=2*zo1+a*(sin(psi)*sin(theta)-3^(1/2)*cos(psi)*sin(theta));                       
+    %f3_psi=(a*xo1+1/2*a*b)*(2*sin(psi)*cos(psi)-2*sin(psi)*cos(psi)*cos(theta)-3^(1/2)*cos(psi)^2+3^(1/2)*sin(psi)^2+3^(1/2)*cos(psi)^2*cos(theta)-3^(1/2)*sin(psi)^2*cos(theta))+(a*yo1+1/2*3^(1/2)*a*b)*(-cos(psi)^2+sin(psi)^2+cos(psi)^2*cos(theta)-sin(psi)^2*cos(theta)-2*3^(1/2)*sin(psi)*cos(psi)+2*3^(1/2)*sin(psi)*cos(psi)*cos(theta))+a*zo1*(sin(theta)*cos(psi)+3^(1/2)*sin(psi)*sin(theta));    
+    %f3_theta=(a*xo1+1/2*a*b)*(sin(psi)^2*sin(theta)-3^(1/2)*sin(psi)*cos(psi)*sin(theta))+(a*yo1+1/2*3^(1/2)*a*b)*(-sin(psi)*cos(psi)*sin(theta)+3^(1/2)*cos(psi)^2*sin(theta))+a*zo1*(sin(psi)*cos(theta)-3^(1/2)*cos(psi)*cos(theta));  
+    %f4_xo1=0;
+    %f4_yo1=-sin(psi)*sin(theta)*a*b;
+    %f4_zo1=-(sin(psi)*cos(psi)-sin(psi)*cos(psi)*cos(theta))*a*b;
+    %f4_psi=-(cos(psi)^2-sin(psi)^2-cos(psi)^2*cos(theta)+sin(psi)^2*cos(theta))*a*b*zo1-cos(psi)*sin(theta)*a*b*yo1;  
+    %f4_theta=-sin(psi)*cos(psi)*sin(theta)*a*b*zo1-sin(psi)*cos(theta)*a*b*yo1;      
+    %f5_xo1=-1/2*(1/2*sin(psi)*sin(theta)*a+1/2*sin(theta)*cos(psi)*a*3^(1/2))*3^(1/2)*b;
+    %f5_yo1=-1/2*(1/2*sin(psi)*sin(theta)*a+1/2*sin(theta)*cos(psi)*a*3^(1/2))*b;  
+    %f5_zo1=1/2*((-1/2*cos(psi)^2-1/2*sin(psi)^2*cos(theta))*a+(1/2*sin(psi)*cos(psi)-1/2*sin(psi)*cos(psi)*cos(theta))*a*3^(1/2))*3^(1/2)*b+1/2*((-1/2*sin(psi)*cos(psi)+1/2*sin(psi)*cos(psi)*cos(theta))*a+(1/2*sin(psi)^2+1/2*cos(psi)^2*cos(theta))*a*3^(1/2))*b;
+    %f5_psi=1/2*((sin(psi)*cos(psi)-sin(psi)*cos(psi)*cos(theta))*a+(1/2*cos(psi)^2-1/2*sin(psi)^2-1/2*cos(psi)^2*cos(theta)+1/2*sin(psi)^2*cos(theta))*a*3^(1/2))*3^(1/2)*b*zo1+1/2*((-1/2*cos(psi)^2+1/2*sin(psi)^2+1/2*cos(psi)^2*cos(theta)-1/2*sin(psi)^2*cos(theta))*a+(sin(psi)*cos(psi)-sin(psi)*cos(psi)*cos(theta))*a*3^(1/2))*b*zo1+(1/2*sin(theta)*cos(psi)*a-1/2*sin(theta)*sin(psi)*a*3^(1/2))*(-1/2*b*yo1-1/2*3^(1/2)*b*xo1);      
+    %f5_theta=1/2*(1/2*sin(psi)^2*sin(theta)*a+1/2*sin(psi)*cos(psi)*sin(theta)*a*3^(1/2))*3^(1/2)*b*zo1+1/2*(-1/2*sin(psi)*cos(psi)*sin(theta)*a-1/2*cos(psi)^2*sin(theta)*a*3^(1/2))*b*zo1+(1/2*sin(psi)*cos(theta)*a+1/2*cos(theta)*cos(psi)*a*3^(1/2))*(-1/2*b*yo1-1/2*3^(1/2)*b*xo1);
+f=[f1;f2;f3;f4;f5];
+df=[f1_xo1,f1_yo1,f1_zo1,f1_psi,f1_theta;...
+    f2_xo1,f2_yo1,f2_zo1,f2_psi,f2_theta;...
+    f3_xo1,f3_yo1,f3_zo1,f3_psi,f3_theta;...
+    f4_xo1,f4_yo1,f4_zo1,f4_psi,f4_theta;...
+    f5_xo1,f5_yo1,f5_zo1,f5_psi,f5_theta];
+deltax=-inv(df)*f;
+XP=[xo1;yo1;zo1;psi;theta]+deltax;
+delta1=[abs(deltax(1)),abs(deltax(2)),abs(deltax(3))];
+delta2=[abs(deltax(4)),abs(deltax(5))];
+delta_l=max(delta1);
+delta_d=max(delta2);
+XO1=XP(1);
+YO1=XP(2);
+ZO1=XP(3);
+PSI=XP(4);
+THETA=XP(5);
+end
+if(ZO1>0)
+    P=[XO1,YO1,ZO1,PSI,THETA];
+    Q=[XO1,YO1,ZO1];
+    RP=[RP;Q];
+    scatter3(XO1,YO1,ZO1,'b')
+    hold on
+end
+
+        end
+    end
+end
+RP
+xx=RP(:,1);
+yy=RP(:,2);
+zz=RP(:,3);
+xxma=max(max(xx))
+xxmi=min(min(xx))
+yyma=max(max(yy))
+yymi=min(min(yy))
+[XOO,YOO,ZOO]=griddata(xx,yy,zz,linspace(xxma,xxmi)',linspace(yyma,yymi),'v4');%插值
+figure,surf(XOO,YOO,ZOO)%三维曲面

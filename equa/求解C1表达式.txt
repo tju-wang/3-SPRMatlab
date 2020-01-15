@@ -1,0 +1,45 @@
+1,1
+pow((sqrt(3)*a*sin(alpha)*sin(beta) - (sqrt(3)*a*cos(beta)*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) + (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496)))/(2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496))),2)/pow((sqrt(3)*a*sin(beta)*cos(alpha) - 1/4503599627370496),2) + pow((2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) + (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496)),2)/pow((2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(beta)*cos(alpha)*sin(gama))))/(sqrt(3)*a*sin(beta)*cos(alpha) - 1/4503599627370496)),2) + 1
+
+1,2
+2*b + (2*(sqrt(3)*a*sin(alpha)*sin(beta) - (sqrt(3)*a*cos(beta)*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) + (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496)))/(2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496)))*(sqrt(3)*a*b*sin(alpha)*sin(beta) + (sqrt(3)*a*cos(beta)*(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) - (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496) - 4787512558085367/68719476736))/(2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496))))/pow((sqrt(3)*a*sin(beta)*cos(alpha) - 1/4503599627370496),2) - (2*(2*Y0 + 2*b - 2*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) + (sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496))*(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) - (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496) - 4787512558085367/68719476736))/pow((2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(beta)*cos(alpha)*sin(gama))))/(sqrt(3)*a*sin(beta)*cos(alpha) - 1/4503599627370496)),2)
+
+1,3
+pow((sqrt(3)*a*b*sin(alpha)*sin(beta) + (sqrt(3)*a*cos(beta)*(pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) - (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496) - 4787512558085367/68719476736))/(2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496))),2)/pow((sqrt(3)*a*sin(beta)*cos(alpha) - 1/4503599627370496),2) + pow((pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) - (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496) - 4787512558085367/68719476736),2)/pow((2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(beta)*cos(alpha)*sin(gama))))/(sqrt(3)*a*sin(beta)*cos(alpha) - 1/4503599627370496)),2) + pow(b,2) - 3844
+
+1,4
+((4995439643117517*Y0)/17592186044416 + (4995439643117517*b)/17592186044416 + pow((X0 - a*sin(beta)*sin(gama)),2) - pow(b,2) - (4995439643117517*a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)))/17592186044416 + pow((Y0 - a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama))),2) + pow((Z0 - a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))),2) + (4995439643117517*sqrt(3)*a*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(35184372088832*(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496)) - (sqrt(3)*a*b*sin(alpha)*sin(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496) - 4787512558085367/68719476736)/(2*X0 - 2*a*sin(beta)*sin(gama) + (sqrt(3)*a*cos(beta)*(2*Z0 - 2*a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496))
+
+1,5
+((7278020380464431*sqrt(3)*a*cos(beta))/4503599627370496 - (4995439643117517*sqrt(3)*a*sin(alpha)*sin(beta))/35184372088832 + sqrt(3)*a*b*sin(alpha)*sin(beta))/(sqrt(3)*a*cos(alpha)*sin(beta) - 1/4503599627370496)
+
+1,6
+matrix([[Xc1, Yc1 + b, Zc1]])
+
+2,1
+matrix([[sqrt(3)*a*cos(beta), sqrt(3)*a*sin(alpha)*sin(beta), -sqrt(3)*a*cos(alpha)*sin(beta)]])
+
+2,2
+matrix([[Xc1 - X0 + a*sin(beta)*sin(gama), Yc1 - Y0 + a*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)), Zc1 - Z0 + a*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))]])
+
+2,3
+先替换sqrt(3)  再找 ^ 然后替换 ^2   求解C1的表达式
+ca = (K3.^2+K5.^2+1)
+cb = (2*K3*M3+2*K5*M5-2*YB-2*XB*K3-2*ZB*K5)
+cc = (M3.^2+M5.^2-2*XB*M3-2*ZB*M5+XB.^2+YB.^2+ZB.^2-s.^2)
+X = (-K2*Yc-M2)/K1
+Z = (M1-(Xi*Xc+Yi*Yc))/Zi
+
+
+
+f = fopen('C:\Users\Mrwang\Desktop\Haptic Project\3-SPR Kinematic\MATLAB\solve.txt','wt');
+fprintf(f,'ca\n%s\n\n',char(ca));
+fprintf(f,'cb\n%s\n\n',char(cb));
+fprintf(f,'cc\n%s\n\n',char(cc));
+fprintf(f,'CY\n%s\n\n',char(X));
+fprintf(f,'CZ\n%s\n\n',char(Z));
+fprintf(f,'vB1C1\n%s\n\n',char(vB1C1));
+fprintf(f,'vAxi_A1\n%s\n\n',char(vAxi_A1));
+fprintf(f,'vA1C1\n%s\n\n',char(vA1C1));
+
+fprintf(f,'先替换3^(1/2)  再找 ^ 然后替换 ^2');

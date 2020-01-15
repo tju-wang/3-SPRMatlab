@@ -1,0 +1,92 @@
+clear all
+clc
+tic  %计时开始
+syms alpha beta  gama X0 Y0 Z0
+syms a b ux uy uz vx vy vz wx wy wz s  %a b 分别为静动平台三角形外接圆半径  s为机构偏距
+RX_alpha = [1,0,0;0,cos(alpha),-sin(alpha);0,sin(alpha),cos(alpha)];
+RY_beta = [cos(beta),0,sin(beta);0,1,0;-sin(beta),0,cos(beta)];
+RX_gama = [1,0,0;0,cos(gama),-sin(gama);0,sin(gama),cos(gama)];
+
+%欧拉角
+R = RX_alpha*RY_beta*RX_gama;
+[ux,vx,wx,uy,vy,wy,uz,vz,wz] = deal(R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3))
+
+%修改坐标系  x轴正方向向  右   y正方向向上   z 正方向由静平台指向动平台
+A1_o = [0;a;0];
+A2_o = [-(3.^(1/2)/2)*a;-1/2*a;0];
+A3_o = [(3^(1/2)/2)*a;-1/2*a;0];
+
+B1 = [0;b;0];
+B2 = [-(3^(1/2)/2)*b;-1/2*b;0];
+B3 = [(3^(1/2)/2)*b;-1/2*b;0];
+
+X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy))   %论文结果 
+Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
+alpha = gama
+
+funn(1) = X0 - (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy))
+funn(2) = Y0 - (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
+funn(3) = alpha - gama
+X0 = 10
+Y0 = 20
+Z0 = 260
+[alpha beta gama] = fsolve(funn)
+
+%% 是
+
+Ao = [X0;Y0;Z0];
+A1 = R*A1_o + Ao;
+A2 = R*A2_o + Ao;
+A3 = R*A3_o + Ao;
+
+%数值计算
+%测量三维模型 花键轴套  大端D=16mm 小端d=10mm
+s = 62;  %测量得 58.5mm + 6.5/2
+alpha = 0.12;
+beta = 0.1;
+gama = alpha;
+Z0 = 260;
+
+a = 41.56 %动平台外接圆半径 
+b = 80; %实际值为80
+q1 = eval(sqrt((B1-A1)'*(B1-A1)));    %q表示 P副长度 此时 B1点位于球铰中心 q的值是 
+q2 = eval(sqrt((B2-A2)'*(B2-A2)));    %球铰中心投影到移动副上的点与转动副之间的长度  B1点坐标需要修改
+q3 = eval(sqrt((B3-A3)'*(B3-A3)));
+
+Pq = [q1 q2 q3]
+X0 = eval(X0);
+Y0 = eval(Y0);
+A0 = [X0 Y0 Z0]
+numm = 1
+result = []     %逆解求解出的结果
+
+for i=1:20
+    alpha = -0.3 + 0.03*i;
+    for j=1:10
+        beta = -0.2 + 0.04*j;    
+        gama = alpha;
+        Z0 = 260;
+        X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy));   %论文结果 
+        Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy));
+        alpha = gama;
+
+        q1 = eval(sqrt((B1-A1)'*(B1-A1)));    %q表示 P副长度 此时 B1点位于球铰中心 q的值是 
+        q2 = eval(sqrt((B2-A2)'*(B2-A2)));    %球铰中心投影到移动副上的点与转动副之间的长度  B1点坐标需要修改
+        q3 = eval(sqrt((B3-A3)'*(B3-A3)));
+
+        Pq = [q1 q2 q3];
+        X0 = eval(X0);
+        Y0 = eval(Y0);
+        A0 = [X0 Y0 Z0];
+        result(numm,:) = [numm Pq alpha beta gama A0];
+        numm = numm+1
+    end
+    
+end
+time1 = toc
+result
+
+% figure(1)
+% plot(result(:,5),result(:,6))
+% figure(2)
+% plot(result(:,1),result(:,2))

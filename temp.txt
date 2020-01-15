@@ -1,0 +1,50 @@
+-uy*(Y0 - b + a*vy) - ux*(X0 + a*vx) - uz*(Z0 + a*vz)
+
+(uy/2 - (3^(1/2)*vy)/2)*(Y0 + b/2 - (a*vy)/2 - (3^(1/2)*a*uy)/2) + (ux/2 - (3^(1/2)*vx)/2)*(X0 + (3^(1/2)*b)/2 - (a*vx)/2 - (3^(1/2)*a*ux)/2) - (uz/2 - (3^(1/2)*vz)/2)*((a*vz)/2 - Z0 + (3^(1/2)*a*uz)/2)
+
+(uy/2 + (3^(1/2)*vy)/2)*(Y0 + b/2 - (a*vy)/2 + (3^(1/2)*a*uy)/2) + (uz/2 + (3^(1/2)*vz)/2)*(Z0 - (a*vz)/2 + (3^(1/2)*a*uz)/2) + (ux/2 + (3^(1/2)*vx)/2)*(X0 - (3^(1/2)*b)/2 - (a*vx)/2 + (3^(1/2)*a*ux)/2)
+ 
+ 
+ ans =
+ 
+-uy*(Y0 - b + a*vy) - ux*(X0 + a*vx) - uz*(Z0 + a*vz)
+ 
+ ans =
+ 
+(uy/2 - (3^(1/2)*vy)/2)*(Y0 + b/2 - (a*vy)/2 - (3^(1/2)*a*uy)/2) + (ux/2 - (3^(1/2)*vx)/2)*(X0 + (3^(1/2)*b)/2 - (a*vx)/2 - (3^(1/2)*a*ux)/2) - (uz/2 - (3^(1/2)*vz)/2)*((a*vz)/2 - Z0 + (3^(1/2)*a*uz)/2)
+ 8  +  8  +  6  =  22По
+ 
+ans =
+ 
+(uy/2 + (3^(1/2)*vy)/2)*(Y0 + b/2 - (a*vy)/2 + (3^(1/2)*a*uy)/2) + (uz/2 + (3^(1/2)*vz)/2)*(Z0 - (a*vz)/2 + (3^(1/2)*a*uz)/2) + (ux/2 + (3^(1/2)*vx)/2)*(X0 - (3^(1/2)*b)/2 - (a*vx)/2 + (3^(1/2)*a*ux)/2)
+8 + 6 + 8 = 22
+
+
+12.26
+ans =
+ 
+- 3^(1/2)*a*uy*(Y0 - b + a*vy) - 3^(1/2)*a*ux*(X0 + a*vx) - 3^(1/2)*a*uz*(Z0 + a*vz)
+ 
+ 
+ans =
+ 
+((3*a*vx)/2 - (3^(1/2)*a*ux)/2)*(X0 + (3^(1/2)*b)/2 - (a*vx)/2 - (3^(1/2)*a*ux)/2) - ((3*a*vz)/2 - (3^(1/2)*a*uz)/2)*((a*vz)/2 - Z0 + (3^(1/2)*a*uz)/2) + ((3*a*vy)/2 - (3^(1/2)*a*uy)/2)*(Y0 + b/2 - (a*vy)/2 - (3^(1/2)*a*uy)/2)
+ 
+ 
+ans =
+ 
+((3*a*vz)/2 + (3^(1/2)*a*uz)/2)*(Z0 - (a*vz)/2 + (3^(1/2)*a*uz)/2) + ((3*a*vx)/2 + (3^(1/2)*a*ux)/2)*(X0 - (3^(1/2)*b)/2 - (a*vx)/2 + (3^(1/2)*a*ux)/2) + ((3*a*vy)/2 + (3^(1/2)*a*uy)/2)*(Y0 + b/2 - (a*vy)/2 + (3^(1/2)*a*uy)/2)
+ 
+ 
+cos(alpha)*sin(beta)*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) + sin(alpha)*sin(beta)*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama))
+
+wy  ux*vz-vx*uz
+cos(beta)*(cos(gama)*sin(alpha) + cos(alpha)*cos(beta)*sin(gama)) + cos(alpha)*sin(beta)^2*sin(gama)
+
+>> ux*vy-uy*vx
+ans = 
+cos(beta)*(cos(alpha)*cos(gama) - cos(beta)*sin(alpha)*sin(gama)) - sin(alpha)*sin(beta)^2*sin(gama)
+
+
+
+
