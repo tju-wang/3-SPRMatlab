@@ -1,6 +1,7 @@
 clear all
 clc
 tic  %计时开始
+nameStr = '取L=200上5个点  沿y方向逼近  记录过程所有数据'
 syms alpha beta  gama X0 Y0 Z0
 syms a b ux uy uz vx vy vz wx wy wz s  %a b 分别为静动平台三角形外接圆半径  s为机构偏距
 global gX0 gY0 gZ0;
@@ -59,11 +60,21 @@ result = []     %逆解求解出的结果
 % x0 = [0.1,0.1,0.1];
 % [ang_argu] = fsolve(fun,x0)
 Pos = [];
-PosR = 50
-CircNum = 8;     %迭代次数
+PosR = 150;
+PosL = 200;
+
+CircNum = 10;     %迭代次数
+
 for i=1:CircNum
-    posX = PosR*sin((i-1)*pi/4);
-    posY = PosR*cos((i-1)*pi/4);
+    if i>5
+        ii = i-5
+        posX = (PosL/2)*(-0.5*ii+1.5);
+        posY = -PosL/2;  
+    else
+        posX = (PosL/2)*(-0.5*i+1.5);
+        posY = PosL/2;
+    end
+   
     posZ = 260;
     Pos(i,:) =  [i posX posY posZ];
     gX0 = Pos(i,2);
@@ -74,7 +85,6 @@ for i=1:CircNum
     [ang_argu] = fsolve(fun,x0);
     PosAng(i,:) = [Pos(i,:) ang_argu(1) ang_argu(2) ang_argu(3)];
 end
-
 
 for i=1:CircNum
     alpha = PosAng(i,5);
@@ -128,37 +138,46 @@ J = jacobian(f,argu);
 % J_1 = inv(J)
 % 开始数值运算  结构常数等进行赋值
 s = 62  %测量得 58.5mm + 6.5/2
-alpha = -0.1;
-beta = 0.1;
-gama = alpha;
-Z0 = 200;
-argu = eval(argu)
+
 numm=1
 kineResult3 = []
 err3 = [];  err3_2 = [];
+diff3 = []; Jacobi3Cond = []; Jacobi3Det=[];
+diff_argu = [0 0 0];
+Jacobi3Inv = [];
 tic
-for i=1:CircNum
-        q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
-        Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
-        diff_argu = [0 0 0];
-        num = 1;
-        err3(numm,num) = 1;  err3_2(numm,num) = 1;
-        while(err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4 )
-           argu = (argu + diff_argu);
-           alpha = argu(1);
-           beta = argu(2);
-           Z0 = argu(3);
-           gama = alpha;
-           Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
-           diff_argu = (-inv(eval(J))*Fi)';
-          
-           num = num+1
-           err3(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
-           err3_2(numm,num) = (diff_argu(3)*diff_argu(3));
-           
-        end
-        kineResult3(numm,:) = [numm q1 q2 q3 argu(1) argu(2) argu(1) eval(X0) eval(Y0) Z0 num];
-        numm = numm+1
+for i=1:CircNum/2
+    q1 = result(numm+5,2); q2 =result(numm+5,3);  q3 = result(numm+5,4);
+    alpha = result(numm,5);
+    beta =result(numm,6);
+    gama = alpha;
+    Z0 = result(numm,9);
+    argu = [alpha beta gama];
+    Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
+    
+    num = 1;
+    err3(numm,num) = 1;  err3_2(numm,num) = 1; diff3(numm,num,:) = [0 0 0]; Jacobi3Det(numm,num) = 0;Jacobi3Cond(numm,num) = 0; Jacobi3Inv(numm,num) = 0;
+    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<500 )
+       argu = (argu + diff_argu);
+       alpha = argu(1);
+       beta = argu(2);
+       Z0 = argu(3);
+       gama = alpha;
+       Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
+       diff_argu = (-inv(eval(J))*Fi)';
+
+       num = num+1
+       Jacobi3Det(numm,num) = det(eval(J));
+       Jacobi3Cond(numm,num)  = cond(eval(J),2);
+       Jacobi3Inv(numm,num) = det(-inv(eval(J)));
+       Fi3(numm,num,:) = Fi;
+       diff3(numm,num,:) = diff_argu;
+       err3(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
+       err3_2(numm,num) = (diff_argu(3)*diff_argu(3));
+
+    end
+    kineResult3(numm,:) = [numm q1 q2 q3 argu(1) argu(2) argu(1) eval(X0) eval(Y0) Z0 num];
+    numm = numm+1
 end
 time2 = toc
 kineResult3
@@ -253,16 +272,26 @@ Y0 = 10;
 argu = eval(argu);
 numm=1
 kineResult6 = []
-  err6 = [];err6_2 = [];
+err6 = [];err6_2 = [];
+Jacobi6Det = []; Jacobi6Cond=[];diff6=[];
+Jacobi6Inv=[];Fi6=[]
 tic
-for i=1:20
-   for j=1:10
-    q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
+for i=1:CircNum/2
+    q1 = result(numm+5,2); q2 =result(numm+5,3);  q3 = result(numm+5,4);
+    alpha = result(numm,5);
+    beta =result(numm,6);
+    gama = alpha;
+    Z0 = result(numm,10);
+    
+    X0 = result(numm,8);
+    Y0 = result(numm,9);
+    argu = [alpha beta gama X0 Y0 Z0];
+    
     Fi = eval(Fii);
     diff_argu = [0 0 0 0 0 0];
     num = 1;
-    err6(numm,num)=1; err6_2(numm,num)=1;
-    while(err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)
+    err6(numm,num)=1; err6_2(numm,num)=1;Jacobi6Det(numm,num)=0;Jacobi6Cond(numm,num)=0;diff6(numm,num,:)=[0 0 0 0 0 0];Jacobi6Inv(numm,num)=0;Fi6(num,num,:)=[0 0 0 0 0 0];
+    while((err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)&&num<5000)
         argu = (argu + diff_argu);
         alpha = argu(1);
         beta = argu(2);
@@ -273,13 +302,17 @@ for i=1:20
         Fi = eval(Fii);
         diff_argu = (-inv(eval(J))*Fi)';
         num = num+1
+        Jacobi6Det(numm,num) = det(eval(J));
+        Jacobi6Cond(numm,num)  = cond(eval(J),2);
+        Jacobi6Inv(numm,num) = det(-inv(eval(J)));
+        Fi6(numm,num,:) = Fi;
+        diff6(numm,num,:) = diff_argu; 
         err6(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
         err6_2(numm,num) = diff_argu(6)*diff_argu(6);
         
     end
     kineResult6(numm,:) = [numm q1 q2 q3 argu num];
     numm = numm+1
-   end
 end
 time3 = toc
 kineResult6
@@ -297,7 +330,7 @@ title('迭代次数对比')
 hold off
 
 figure(2)
-plot(result(:,1),(result(:,8)),'b -.')
+plot(PosAng(:,1),(PosAng(:,2)),'b -.')
 hold on
 plot(result(:,1),(kineResult6(:,8)),'r *')
 hold on
@@ -313,6 +346,16 @@ hold on
 plot(result(:,1),real(kineResult3(:,9)),'g s')
 title('y轴求解结果验证')
 hold off
+
+figure(10)
+plot(result(:,1),real(result(:,9)),'b -.')
+hold on
+plot(result(:,1),real(kineResult6(:,9)),'r *')
+hold on
+plot(result(:,1),real(kineResult3(:,9)),'g s')
+title('y轴求解结果验证')
+hold off
+
 
 figure(4)
 plot(result(:,1),real(result(:,5)),'b -.')

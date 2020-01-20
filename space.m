@@ -1,5 +1,5 @@
 %% 6杆  正解 
-%求解工作空间  
+%求解工作空间  需要将不同限制的原因  用不同的颜色标出来   需要考虑实际的机构！！（带偏距，加球铰转动角度幅度的限制、加转轴部分长方体与静平台之间的干涉限制）
 clear all
 clc
 syms alpha beta  gama X0 Y0 Z0 real
@@ -124,6 +124,7 @@ for q2=120:10:250
         end
     end
     if errflag ~= 1
+        
         sprspace(numm,:) = [numm q1 q2 q3 argu err err_2 num];
         numm = numm+1
     else

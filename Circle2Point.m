@@ -1,7 +1,7 @@
 clear all
 clc
 tic  %计时开始
-nameStr = '取L=200上5个点  沿x方向逼近  记录过程所有数据'
+nameStr = '取R=150圆上8个点  向中心逼近  初值Z0=260   终值Z0=240  记录过程所有数据'
 syms alpha beta  gama X0 Y0 Z0
 syms a b ux uy uz vx vy vz wx wy wz s  %a b 分别为静动平台三角形外接圆半径  s为机构偏距
 global gX0 gY0 gZ0;
@@ -61,20 +61,10 @@ result = []     %逆解求解出的结果
 % [ang_argu] = fsolve(fun,x0)
 Pos = [];
 PosR = 150;
-PosL = 100;
-
-CircNum = 10;     %迭代次数
-
+CircNum = 8;     %迭代次数
 for i=1:CircNum
-    if i>5
-        ii = i-5
-        posX = PosL/2;
-        posY = (PosL/2)*(-0.5*ii+1.5);  
-    else
-        posX = -PosL/2;
-        posY = (PosL/2)*(-0.5*i+1.5);  
-    end
-   
+    posX = PosR*cos((i-1)*pi/4);
+    posY = PosR*sin((i-1)*pi/4);
     posZ = 260;
     Pos(i,:) =  [i posX posY posZ];
     gX0 = Pos(i,2);
@@ -146,18 +136,18 @@ diff3 = []; Jacobi3Cond = []; Jacobi3Det=[];
 diff_argu = [0 0 0];
 Jacobi3Inv = [];
 tic
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
+for i=1:CircNum
+    q1 =   262.83 ; q2 =  262.83 ;  q3 =   262.83 ;
     alpha = PosAng(numm,5);
     beta =PosAng(numm,6);
     gama = alpha;
-    Z0 = 220;
+    Z0 = PosAng(numm,4);
     argu = [alpha beta gama];
     Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
     
     num = 1;
     err3(numm,num) = 1;  err3_2(numm,num) = 1; diff3(numm,num,:) = [0 0 0]; Jacobi3Det(numm,num) = 0;Jacobi3Cond(numm,num) = 0; Jacobi3Inv(numm,num) = 0;
-    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<50 )
+    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<5000 )
        argu = (argu + diff_argu);
        alpha = argu(1);
        beta = argu(2);
@@ -276,8 +266,8 @@ err6 = [];err6_2 = [];
 Jacobi6Det = []; Jacobi6Cond=[];diff6=[];
 Jacobi6Inv=[];Fi6=[]
 tic
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
+for i=1:CircNum
+    q1 =   262.83; q2 =   262.83;  q3 =   262.83;
     alpha = PosAng(numm,5);
     beta =PosAng(numm,6);
     gama = alpha;
@@ -290,7 +280,7 @@ for i=1:CircNum/2
     diff_argu = [0 0 0 0 0 0];
     num = 1;
     err6(numm,num)=1; err6_2(numm,num)=1;Jacobi6Det(numm,num)=0;Jacobi6Cond(numm,num)=0;diff6(numm,num,:)=[0 0 0 0 0 0];Jacobi6Inv(numm,num)=0;Fi6(num,num,:)=[0 0 0 0 0 0];
-    while((err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)&&num<50)
+    while(err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)
         argu = (argu + diff_argu);
         alpha = argu(1);
         beta = argu(2);

@@ -7,5 +7,5 @@ function Fu =solve_fun(x)
     b = 80;
     Fu(1) =( gX0 - (2*(gZ0)*(cos(x(1))*sin(x(2))*(cos(x(1))*cos(x(3)) - cos(x(2))*sin(x(1))*sin(x(3))) + sin(x(1))*sin(x(2))*(cos(x(3))*sin(x(1)) + cos(x(1))*cos(x(2))*sin(x(3)))) - b*sin(x(1))*sin(x(2))*(cos(x(2)) - 3*cos(x(1))*cos(x(3)) + 3*cos(x(2))*sin(x(1))*sin(x(3))))/(2*cos(x(2))*(cos(x(1))*cos(x(3)) - cos(x(2))*sin(x(1))*sin(x(3))) - 2*sin(x(1))*sin(x(2))^2*sin(x(3))));
     Fu(2) =( gY0 - -(2*(gZ0)*(cos(x(2))*(cos(x(3))*sin(x(1)) + cos(x(1))*cos(x(2))*sin(x(3))) + cos(x(1))*sin(x(2))^2*sin(x(3))) - b*cos(x(2))*(cos(x(2)) - cos(x(1))*cos(x(3)) + cos(x(2))*sin(x(1))*sin(x(3))) + 2*b*sin(x(1))*sin(x(2))^2*sin(x(3)))/(2*cos(x(2))*(cos(x(1))*cos(x(3)) - cos(x(2))*sin(x(1))*sin(x(3))) - 2*sin(x(1))*sin(x(2))^2*sin(x(3))));
-    Fu(3) =(x(1) - x(3));
+    Fu(3) =(x(1) + x(3));
 end

@@ -125,8 +125,12 @@ RY_beta = [cos(beta),0,sin(beta);0,1,0;-sin(beta),0,cos(beta)];
 % RX_gama = [1,0,0;0,cos(alpha),-sin(alpha);0,sin(alpha),cos(alpha)]
 RX_gama = [1,0,0;0,cos(gama),-sin(gama);0,sin(gama),cos(gama)];
 
+RZ_alpha = [cos(alpha),-sin(alpha),0;sin(alpha),cos(alpha),0;0,0,1];
+RX_beta = [1,0,0;0,cos(beta),-sin(beta);0,sin(beta),cos(beta)];
+RZ_gama = [cos(gama),-sin(gama),0;sin(gama),cos(gama),0;0,0,1];
+
 %欧拉角
-R = RX_alpha*RY_beta*RX_gama;
+R = RZ_alpha*RX_beta*RZ_gama;
 [ux,vx,wx,uy,vy,wy,uz,vz,wz] = deal(R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3))
 
 
@@ -153,7 +157,7 @@ Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
 %q3 = 1972    2.令alpha=0 beta=0  计算q1=q2=q3=1938   3.对应 缩短q1  q2<q3 
 %所以 X>0   Y<0  因此
 
-alpha = gama
+alpha = -gama
 
 Ao = [X0;Y0;Z0];
 A1 = R*A1_o + Ao;
@@ -167,9 +171,9 @@ A3 = R*A3_o + Ao;
 %数值计算
 %测量三维模型 花键轴套  大端D=16mm 小端d=10mm
 s = 62;  %测量得 58.5mm + 6.5/2
-alpha = 0;
-beta = 0;
-gama = alpha;
+alpha = 0.18;
+beta = 0.12;
+gama = -alpha;
 Z0 = 260;
 
 a = 41.56 %动平台外接圆半径
