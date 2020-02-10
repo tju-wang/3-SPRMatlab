@@ -1,11 +1,8 @@
 clear all
 clc
 tic  %计时开始
-nameStr = '取L=200上5个点  沿x方向逼近  记录过程所有数据'
 syms alpha beta  gama X0 Y0 Z0
-
 syms a b ux uy uz vx vy vz wx wy wz s  %a b 分别为静动平台三角形外接圆半径  s为机构偏距
-global gX0 gY0 gZ0;
 RX_alpha = [1,0,0;0,cos(alpha),-sin(alpha);0,sin(alpha),cos(alpha)];
 RY_beta = [cos(beta),0,sin(beta);0,1,0;-sin(beta),0,cos(beta)];
 RX_gama = [1,0,0;0,cos(gama),-sin(gama);0,sin(gama),cos(gama)];
@@ -22,6 +19,7 @@ A3_o = [(3^(1/2)/2)*a;-1/2*a;0];
 B1 = [0;b;0];
 B2 = [-(3^(1/2)/2)*b;-1/2*b;0];
 B3 = [(3^(1/2)/2)*b;-1/2*b;0];
+
 
 X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy))   %论文结果 
 Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
@@ -53,67 +51,36 @@ A0 = [X0 Y0 Z0]
 numm = 1
 result = []     %逆解求解出的结果
 
-%已知xyz坐标  求解要研究点的位姿 alpha beta gama
+for i=1:10
+    alpha = -0.2 + 0.04*i;
+    for j=1:5
+        beta = -0.1 + 0.04*j;    
+        gama = alpha;
+        Z0 = 260;
+        X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy));   %论文结果 
+        Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy));
+        alpha = gama;
 
+        q1 = eval(sqrt((B1-A1)'*(B1-A1)));    %q表示 P副长度 此时 B1点位于球铰中心 q的值是 
+        q2 = eval(sqrt((B2-A2)'*(B2-A2)));    %球铰中心投影到移动副上的点与转动副之间的长度  B1点坐标需要修改
+        q3 = eval(sqrt((B3-A3)'*(B3-A3)));
 
-
-% fun = @solve_fun;
-% x0 = [0.1,0.1,0.1];
-% [ang_argu] = fsolve(fun,x0)
-Pos = [];
-PosR = 150;
-PosL = 100;
-
-CircNum = 10;     %迭代次数
-
-for i=1:CircNum
-    if i>5
-        ii = i-5
-        posX = PosL/2;
-        posY = (PosL/2)*(-0.5*ii+1.5);  
-    else
-        posX = -PosL/2;
-        posY = (PosL/2)*(-0.5*i+1.5);  
+        Pq = [q1 q2 q3];
+        X0 = eval(X0);
+        Y0 = eval(Y0);
+        A0 = [X0 Y0 Z0];
+        result(numm,:) = [numm Pq alpha beta gama A0];
+        numm = numm+1
     end
-   
-    posZ = 260;
-    Pos(i,:) =  [i posX posY posZ];
-    gX0 = Pos(i,2);
-    gY0 = Pos(i,3); 
-    gZ0 = Pos(i,4);
-    fun = @solve_fun;
-    x0 = [0.1,0.1,0.1];
-    [ang_argu] = fsolve(fun,x0);
-    PosAng(i,:) = [Pos(i,:) ang_argu(1) ang_argu(2) ang_argu(3)];
-end
-
-for i=1:CircNum
-    alpha = PosAng(i,5);
-    beta = PosAng(i,6);    
-    gama = alpha;
-    Z0 = PosAng(i,4);
-    X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy));   %论文结果 
-    Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy));
-    alpha = gama;
-
-    q1 = eval(sqrt((B1-A1)'*(B1-A1)));    %q表示 P副长度 此时 B1点位于球铰中心 q的值是 
-    q2 = eval(sqrt((B2-A2)'*(B2-A2)));    %球铰中心投影到移动副上的点与转动副之间的长度  B1点坐标需要修改
-    q3 = eval(sqrt((B3-A3)'*(B3-A3)));
-
-    Pq = [q1 q2 q3];
-    X0 = eval(X0);
-    Y0 = eval(Y0);
-    A0 = [X0 Y0 Z0];
-    result(numm,:) = [numm Pq alpha beta gama A0];
-    numm = numm+1
+    
 end
 time1 = toc
 result
 
-%xy平面  初值轨迹
 % figure(1)
-% plot(result(:,8),result(:,9))
-
+% plot(result(:,5),result(:,6))
+% figure(2)
+% plot(result(:,1),result(:,2))
 
 %% 使用正解计算  三杆
 
@@ -139,46 +106,40 @@ J = jacobian(f,argu);
 % J_1 = inv(J)
 % 开始数值运算  结构常数等进行赋值
 s = 62  %测量得 58.5mm + 6.5/2
-
+alpha = -0.1;
+beta = 0.1;
+gama = alpha;
+Z0 = 200;
+argu = eval(argu)
 numm=1
 kineResult3 = []
-err3 = [];  err3_2 = [];
-diff3 = []; Jacobi3Cond = []; Jacobi3Det=[];
-diff_argu = [0 0 0];
-Jacobi3Inv = [];
+err = [];  err_2 = [];
 tic
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
-    alpha = PosAng(numm,5);
-    beta =PosAng(numm,6);
-    gama = alpha;
-    Z0 = 220;
-    argu = [alpha beta gama];
-    Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
-    
-    num = 1;
-    err3(numm,num) = 1;  err3_2(numm,num) = 1; diff3(numm,num,:) = [0 0 0]; Jacobi3Det(numm,num) = 0;Jacobi3Cond(numm,num) = 0; Jacobi3Inv(numm,num) = 0;
-    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<50 )
-       argu = (argu + diff_argu);
-       alpha = argu(1);
-       beta = argu(2);
-       Z0 = argu(3);
-       gama = alpha;
-       Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
-       diff_argu = (-inv(eval(J))*Fi)';
-
-       num = num+1
-       Jacobi3Det(numm,num) = det(eval(J));
-       Jacobi3Cond(numm,num)  = cond(eval(J),2);
-       Jacobi3Inv(numm,num) = det(-inv(eval(J)));
-       Fi3(numm,num,:) = Fi;
-       diff3(numm,num,:) = diff_argu;
-       err3(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
-       err3_2(numm,num) = (diff_argu(3)*diff_argu(3));
-
+for i=1:10
+   
+    for j=1:5
+        q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
+        Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
+        diff_argu = [0 0 0];
+        num = 1;
+        err(numm,num) = 1;  err_2(numm,num) = 1;
+        while(err(numm,num)>1.0e-4 || err_2(numm,num)>1.0e-4 )
+           argu = (argu + diff_argu);
+           alpha = argu(1);
+           beta = argu(2);
+           Z0 = argu(3);
+           gama = alpha;
+           Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
+           diff_argu = (-inv(eval(J))*Fi)';
+          
+           num = num+1
+           err(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
+           err_2(numm,num) = (diff_argu(3)*diff_argu(3));
+           
+        end
+        kineResult3(numm,:) = [numm q1 q2 q3 argu(1) argu(2) argu(1) eval(X0) eval(Y0) Z0 num];
+        numm = numm+1
     end
-    kineResult3(numm,:) = [numm q1 q2 q3 argu(1) argu(2) argu(1) eval(X0) eval(Y0) Z0 num];
-    numm = numm+1
 end
 time2 = toc
 kineResult3
@@ -273,25 +234,16 @@ Y0 = 10;
 argu = eval(argu);
 numm=1
 kineResult6 = []
-err6 = [];err6_2 = [];
-Jacobi6Det = []; Jacobi6Cond=[];diff6=[];
-Jacobi6Inv=[];Fi6=[]
+  err = [];err_2 = [];
 tic
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
-    alpha = PosAng(numm,5);
-    beta =PosAng(numm,6);
-    gama = alpha;
-    Z0 = PosAng(numm,4);
-    X0 = PosAng(numm,2);
-    Y0 = PosAng(numm,3);
-    argu = [alpha beta gama X0 Y0 Z0];
-    
+for i=1:10
+   for j=1:5
+    q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
     Fi = eval(Fii);
     diff_argu = [0 0 0 0 0 0];
     num = 1;
-    err6(numm,num)=1; err6_2(numm,num)=1;Jacobi6Det(numm,num)=0;Jacobi6Cond(numm,num)=0;diff6(numm,num,:)=[0 0 0 0 0 0];Jacobi6Inv(numm,num)=0;Fi6(num,num,:)=[0 0 0 0 0 0];
-    while((err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)&&num<50)
+    err(numm,num)=1; err_2(numm,num)=1;
+    while(err(numm,num)>1.0e-4 || err_2(numm,num)>1.0e-4)
         argu = (argu + diff_argu);
         alpha = argu(1);
         beta = argu(2);
@@ -302,17 +254,13 @@ for i=1:CircNum/2
         Fi = eval(Fii);
         diff_argu = (-inv(eval(J))*Fi)';
         num = num+1
-        Jacobi6Det(numm,num) = det(eval(J));
-        Jacobi6Cond(numm,num)  = cond(eval(J),2);
-        Jacobi6Inv(numm,num) = det(-inv(eval(J)));
-        Fi6(numm,num,:) = Fi;
-        diff6(numm,num,:) = diff_argu; 
-        err6(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
-        err6_2(numm,num) = diff_argu(6)*diff_argu(6);
+        err(numm,num) = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
+        err_2(numm,num) = diff_argu(6)*diff_argu(6);
         
     end
     kineResult6(numm,:) = [numm q1 q2 q3 argu num];
     numm = numm+1
+   end
 end
 time3 = toc
 kineResult6
@@ -323,14 +271,14 @@ kineResult6
 % plot(result(:,8),result(:,9),'r -.')
 
 figure(1)
-plot(result(:,1),log(kineResult6(:,11)),'r -.')
+plot(result(:,1),log(kineResult6(:,13)),'r -.')
 hold on
-plot(result(:,1),log(kineResult3(:,11)),'g -.')
+plot(result(:,1),log(kineResult3(:,13)),'g -.')
 title('迭代次数对比')
 hold off
 
 figure(2)
-plot(PosAng(:,1),(PosAng(:,2)),'b -.')
+plot(result(:,1),(result(:,8)),'b -.')
 hold on
 plot(result(:,1),(kineResult6(:,8)),'r *')
 hold on
@@ -346,16 +294,6 @@ hold on
 plot(result(:,1),real(kineResult3(:,9)),'g s')
 title('y轴求解结果验证')
 hold off
-
-figure(10)
-plot(result(:,1),real(result(:,9)),'b -.')
-hold on
-plot(result(:,1),real(kineResult6(:,9)),'r *')
-hold on
-plot(result(:,1),real(kineResult3(:,9)),'g s')
-title('y轴求解结果验证')
-hold off
-
 
 figure(4)
 plot(result(:,1),real(result(:,5)),'b -.')
