@@ -1,5 +1,10 @@
 %% 6杆  正解 
-%求解工作空间  
+%求解工作空间  一定要求解设备实际的工作空间才有意义
+%求得模型的正解之后，需要求真实模型的各个点的坐标  C点  P副  P副长度使用C点和配重块之间的长度来限制
+%干涉条件  1.P副长度 最长最短  2.支架干涉  怎么算？？  3.动平台与桌面  配重块与桌面之间的干涉
+%标记干涉种类  位操作？  在一定干涉范围内修改标记位  最后画对应点的颜色
+%计算和分析分开整
+
 clear all
 clc
 syms alpha beta  gama X0 Y0 Z0 real
@@ -27,12 +32,12 @@ A1_o = [0;a;0];
 A2_o = [-(3.^(1/2)/2)*a;-1/2*a;0];
 A3_o = [(3^(1/2)/2)*a;-1/2*a;0];
 
-%B1 = [0;b;20];
-% B2 = [-(3^(1/2)/2)*b;-1/2*b;20];
-% B3 = [(3^(1/2)/2)*b;-1/2*b;20];
-B1 = [0;b;0];
-B2 = [-(3^(1/2)/2)*b;-1/2*b;0];
-B3 = [(3^(1/2)/2)*b;-1/2*b;0];
+B1 = [0;b;20];
+B2 = [-(3^(1/2)/2)*b;-1/2*b;20];
+B3 = [(3^(1/2)/2)*b;-1/2*b;20];
+% B1 = [0;b;0];
+% B2 = [-(3^(1/2)/2)*b;-1/2*b;0];
+% B3 = [(3^(1/2)/2)*b;-1/2*b;0];
 
 Ao = [X0;Y0;Z0];
 A1 = R*A1_o + Ao;
@@ -89,17 +94,22 @@ Y0 = 10;
 argu = eval(argu);
 numm=1
 sprspace = []
-errflag = 0
+errflag = 0;
+color = 0;
+qmin = 100; qmax = 295; qdiff = 2;
 tic
-for q1 = 120:10:250
-for q2=120:10:250
-   for q3 = 120:10:250
+rember_err = []
+for q1 = qmin:qdiff:qmax
+for q2 = qmin:qdiff:qmax
+   for q3 = qmin:qdiff:qmax
        %先对杆长情况进行判断
+       color = 0;
        errq(1) = abs(q1-q2);
        errq(2) = abs(q1-q3);
        errq(3) = abs(q2-q3);
-       if max(errq(:))>sqrt(3)*(b-a)
-            break;
+       if max(errq(:))>=sqrt(3)*(b-a)    %三角形 两边之差小于第三边   大于or等于时，不计算工作空间
+            rember_err(numm,:) = [numm q1 q2 q3];
+           continue;
        end
     err = 1;err_2 = 10;
     Fi = eval(Fii);
@@ -117,26 +127,79 @@ for q2=120:10:250
         diff_argu = (-inv(eval(J))*Fi)';
         err = diff_argu(1)*diff_argu(1)+diff_argu(2)*diff_argu(2);
         err_2 = diff_argu(6)*diff_argu(6);
-        num = num+1
+        num = num+1;
         if num > 50
             errflag = 1;
             break;
         end
     end
     if errflag ~= 1
-        sprspace(numm,:) = [numm q1 q2 q3 argu err err_2 num];
+        %求解出结果  对结果是否是机构的工作空间进行验算
+        sprspace(numm,:) = [numm q1 q2 q3 argu color err err_2 num];
         numm = numm+1
     else
         errflag = 0;
         errq = [q1 q2 q3]
     end
-   
+    
    end    
 end
 end
 
+
+
 time = toc
 sprspace
 
-scatter3(sprspace(:,8),sprspace(:,9),sprspace(:,10),'r o')
+%% 分析数据  改变颜色
+num = max(sprspace(:))
+numm = 1;
+spaceRed = []
+redNum = 1;
+spaceBlue = []
+blueNum = 1;
+for i = 1:num
+    if (sprspace(numm,2) == qmin) || sprspace(numm,3) == qmin || sprspace(numm,4) == qmin
+        sprspace(numm,11) = 1;
+        spaceRed(redNum,:) = [redNum sprspace(numm,:)];
+        redNum = redNum+1;
+    end
+    if (sprspace(numm,2) == qmax) || sprspace(numm,3) == qmax || sprspace(numm,4) == qmax
+       sprspace(numm,11) = bitor(sprspace(numm,11),2); 
+        spaceBlue(blueNum,:) =[blueNum sprspace(numm,:)];
+        blueNum = blueNum+1;
+    end
+    numm = numm+1;
+    
+end
+
+
+%区分杆长限制边界的颜色
+num = max(sprspace(:))
+numm = 1;
+figure(1)
+hold on
+for i = 1:num    
+    if sprspace(numm,11)==1
+        scatter3(sprspace(numm,8),sprspace(numm,9),sprspace(numm,10),'b o')
+    elseif sprspace(numm,11)>=2
+        scatter3(sprspace(numm,8),sprspace(numm,9),sprspace(numm,10),'g o')
+    else
+        scatter3(sprspace(numm,8),sprspace(numm,9),sprspace(numm,10),'r o')
+    end
+    numm = numm+1
+end
+
+%scatter3(sprspace(:,8),sprspace(:,9),sprspace(:,10),'r o')
+datasize = size(spaceRed(:,9))
+grid_diff = 300/datasize(1)
+[Mx My] = meshgrid(-150:grid_diff:150);
+Mz = griddata(spaceRed(:,9),spaceRed(:,10),spaceRed(:,11),Mx,My)
+
+figure(2)
+mesh(Mx,My,Mz)
+hold on
+Hz = griddata(spaceBlue(:,9),spaceBlue(:,10),spaceBlue(:,11),Mx,My)
+mesh(Mx,My,Hz)
+
 

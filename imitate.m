@@ -53,22 +53,23 @@ result = []     %逆解求解出的结果
 
 %已知xyz坐标  求解要研究点的位姿 alpha beta gama
 
-
-
 % fun = @solve_fun;
 % x0 = [0.1,0.1,0.1];
 % [ang_argu] = fsolve(fun,x0)
 Pos = [];
-PosR = 150
+PosR = 100
 CircNum = 8;     %迭代次数
 for i=1:CircNum
-    posX = PosR*sin((i-1)*pi/4);
-    posY = PosR*cos((i-1)*pi/4);
+    posX = PosR*cos((i-1)*pi/4);
+    posY = PosR*sin((i-1)*pi/4);
     posZ = 260;
     Pos(i,:) =  [i posX posY posZ];
-    gX0 = Pos(i,2);
-    gY0 = Pos(i,3); 
-    gZ0 = Pos(i,4);
+%     gX0 = Pos(i,2);
+%     gY0 = Pos(i,3); 
+%     gZ0 = Pos(i,4);
+    gX0 = 20;
+    gY0 = 50; 
+    gZ0 = 260;
     fun = @solve_fun;
     x0 = [0.1,0.1,0.1];
     [ang_argu] = fsolve(fun,x0);
@@ -133,11 +134,13 @@ kineResult3 = []
 err3 = [];  err3_2 = [];
 tic
 for i=1:CircNum
-    q1 = 243.0589; q2 = 243.0589;  q3 = 243.0589;
-    alpha = PosAng(numm,5);
-    beta =PosAng(numm,6);
-    gama = alpha;
-    Z0 = PosAng();
+    q1 = 260.72; q2 = 308.5;  q3 =273.45;
+                  
+    alpha = -0.09376;
+    beta =0.077952;
+    gama = -0.09376;
+               
+    Z0 = 260;
     argu = [alpha beta gama];
     Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
     diff_argu = [0 0 0];
@@ -257,7 +260,8 @@ kineResult6 = []
 tic
 for i=1:20
    for j=1:10
-    q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
+%     q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
+    q1 = 270; q2 = 240;  q3 = 260;
     Fi = eval(Fii);
     diff_argu = [0 0 0 0 0 0];
     num = 1;
@@ -279,10 +283,15 @@ for i=1:20
     end
     kineResult6(numm,:) = [numm q1 q2 q3 argu num];
     numm = numm+1
+%     acos((X0^2+(Y0-b)^2+(Z0)^2-q1^2-a^2)/(-2*a*q1))
+%     acos(((X0+(3^(1/2)*b)/2)^2+(Y0+b/2)^2+(Z0)^2-q2^2-a^2)/(-2*a*q2))
+%     acos(((X0-(3^(1/2)*b)/2)^2+(Y0+b/2)^2+(Z0)^2-q3^2-a^2)/(-2*a*q3))
    end
 end
 time3 = toc
 kineResult6
+
+
 
 %% 画图
 % %x  y 的轨迹形状
