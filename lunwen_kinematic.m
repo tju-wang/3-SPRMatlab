@@ -42,7 +42,8 @@ Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
 % X0 = 2*Z0*wx/(2*wz)
 % Y0 = 2*Z0*wy/(2*wz)
 
-alpha = gama
+% alpha = gama
+gama = alpha;
 
 Ao = [X0;Y0;Z0]
 A1 = R*A1_o + Ao
@@ -65,7 +66,9 @@ Z0 = 250;
 %q1 =287;   q2 = 309;   q3 = 322;
 %q1 =261;   q2 =261;   q3 = 261;
 
+
  pq = [273.87 261.49 258.50];
+
  q1 = pq(1);  q2 = pq(2);  q3 = pq(3);
 
 

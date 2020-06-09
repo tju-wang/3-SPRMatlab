@@ -1,9 +1,8 @@
 clear all
 clc
 tic  %计时开始
-nameStr = '取L=200上5个点  沿x方向逼近  记录过程所有数据'
+nameStr = '取R=150圆上8个点  向中心逼近  初值Z0=260   终值Z0=240  记录过程所有数据'
 syms alpha beta  gama X0 Y0 Z0
-
 syms a b ux uy uz vx vy vz wx wy wz s  %a b 分别为静动平台三角形外接圆半径  s为机构偏距
 global gX0 gY0 gZ0;
 RX_alpha = [1,0,0;0,cos(alpha),-sin(alpha);0,sin(alpha),cos(alpha)];
@@ -55,41 +54,22 @@ result = []     %逆解求解出的结果
 
 %已知xyz坐标  求解要研究点的位姿 alpha beta gama
 
+
+
 % fun = @solve_fun;
 % x0 = [0.1,0.1,0.1];
 % [ang_argu] = fsolve(fun,x0)
 Pos = [];
-<<<<<<< HEAD
-PosR = 100
+PosR = 150;
 CircNum = 8;     %迭代次数
 for i=1:CircNum
     posX = PosR*cos((i-1)*pi/4);
     posY = PosR*sin((i-1)*pi/4);
-=======
-PosR = 150;
-PosL = 100;
-
-CircNum = 10;     %迭代次数
-
-for i=1:CircNum
-    if i>5
-        ii = i-5
-        posX = PosL/2;
-        posY = (PosL/2)*(-0.5*ii+1.5);  
-    else
-        posX = -PosL/2;
-        posY = (PosL/2)*(-0.5*i+1.5);  
-    end
-   
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
     posZ = 260;
     Pos(i,:) =  [i posX posY posZ];
-%     gX0 = Pos(i,2);
-%     gY0 = Pos(i,3); 
-%     gZ0 = Pos(i,4);
-    gX0 = 20;
-    gY0 = 50; 
-    gZ0 = 260;
+    gX0 = Pos(i,2);
+    gY0 = Pos(i,3); 
+    gZ0 = Pos(i,4);
     fun = @solve_fun;
     x0 = [0.1,0.1,0.1];
     [ang_argu] = fsolve(fun,x0);
@@ -156,29 +136,18 @@ diff3 = []; Jacobi3Cond = []; Jacobi3Det=[];
 diff_argu = [0 0 0];
 Jacobi3Inv = [];
 tic
-<<<<<<< HEAD
 for i=1:CircNum
-    q1 = 260.72; q2 = 308.5;  q3 =273.45;
-                  
-    alpha = -0.09376;
-    beta =0.077952;
-    gama = -0.09376;
-               
-    Z0 = 260;
-=======
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
+    q1 =   262.83 ; q2 =  262.83 ;  q3 =   262.83 ;
     alpha = PosAng(numm,5);
     beta =PosAng(numm,6);
     gama = alpha;
-    Z0 = 220;
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
+    Z0 = PosAng(numm,4);
     argu = [alpha beta gama];
     Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
     
     num = 1;
     err3(numm,num) = 1;  err3_2(numm,num) = 1; diff3(numm,num,:) = [0 0 0]; Jacobi3Det(numm,num) = 0;Jacobi3Cond(numm,num) = 0; Jacobi3Inv(numm,num) = 0;
-    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<50 )
+    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<5000 )
        argu = (argu + diff_argu);
        alpha = argu(1);
        beta = argu(2);
@@ -297,14 +266,8 @@ err6 = [];err6_2 = [];
 Jacobi6Det = []; Jacobi6Cond=[];diff6=[];
 Jacobi6Inv=[];Fi6=[]
 tic
-<<<<<<< HEAD
-for i=1:20
-   for j=1:10
-%     q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
-    q1 = 270; q2 = 240;  q3 = 260;
-=======
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
+for i=1:CircNum
+    q1 =   262.83; q2 =   262.83;  q3 =   262.83;
     alpha = PosAng(numm,5);
     beta =PosAng(numm,6);
     gama = alpha;
@@ -313,12 +276,11 @@ for i=1:CircNum/2
     Y0 = PosAng(numm,3);
     argu = [alpha beta gama X0 Y0 Z0];
     
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
     Fi = eval(Fii);
     diff_argu = [0 0 0 0 0 0];
     num = 1;
     err6(numm,num)=1; err6_2(numm,num)=1;Jacobi6Det(numm,num)=0;Jacobi6Cond(numm,num)=0;diff6(numm,num,:)=[0 0 0 0 0 0];Jacobi6Inv(numm,num)=0;Fi6(num,num,:)=[0 0 0 0 0 0];
-    while((err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)&&num<50)
+    while(err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)
         argu = (argu + diff_argu);
         alpha = argu(1);
         beta = argu(2);
@@ -340,18 +302,9 @@ for i=1:CircNum/2
     end
     kineResult6(numm,:) = [numm q1 q2 q3 argu num];
     numm = numm+1
-<<<<<<< HEAD
-%     acos((X0^2+(Y0-b)^2+(Z0)^2-q1^2-a^2)/(-2*a*q1))
-%     acos(((X0+(3^(1/2)*b)/2)^2+(Y0+b/2)^2+(Z0)^2-q2^2-a^2)/(-2*a*q2))
-%     acos(((X0-(3^(1/2)*b)/2)^2+(Y0+b/2)^2+(Z0)^2-q3^2-a^2)/(-2*a*q3))
-   end
-=======
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
 end
 time3 = toc
 kineResult6
-
-
 
 %% 画图
 % %x  y 的轨迹形状

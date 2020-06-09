@@ -1,17 +1,21 @@
 clear all
 clc
 tic  %计时开始
-nameStr = '取L=200上5个点  沿x方向逼近  记录过程所有数据'
+nameStr = 'zxz欧拉角  取L=200上5个点  沿x方向逼近  记录过程所有数据'
 syms alpha beta  gama X0 Y0 Z0
-
 syms a b ux uy uz vx vy vz wx wy wz s  %a b 分别为静动平台三角形外接圆半径  s为机构偏距
 global gX0 gY0 gZ0;
 RX_alpha = [1,0,0;0,cos(alpha),-sin(alpha);0,sin(alpha),cos(alpha)];
 RY_beta = [cos(beta),0,sin(beta);0,1,0;-sin(beta),0,cos(beta)];
 RX_gama = [1,0,0;0,cos(gama),-sin(gama);0,sin(gama),cos(gama)];
 
+RZ_alpha = [cos(alpha),-sin(alpha),0;sin(alpha),cos(alpha),0;0,0,1];
+RX_beta = [1,0,0;0,cos(beta),-sin(beta);0,sin(beta),cos(beta)];
+RZ_gama = [cos(gama),-sin(gama),0;sin(gama),cos(gama),0;0,0,1];
+
 %欧拉角
-R = RX_alpha*RY_beta*RX_gama;
+R = RZ_alpha*RX_beta*RZ_gama;
+
 [ux,vx,wx,uy,vy,wy,uz,vz,wz] = deal(R(1,1),R(1,2),R(1,3),R(2,1),R(2,2),R(2,3),R(3,1),R(3,2),R(3,3))
 
 %修改坐标系  x轴正方向向  右   y正方向向上   z 正方向由静平台指向动平台
@@ -25,7 +29,7 @@ B3 = [(3^(1/2)/2)*b;-1/2*b;0];
 
 X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy))   %论文结果 
 Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
-alpha = gama
+alpha = -gama
 
 Ao = [X0;Y0;Z0];
 A1 = R*A1_o + Ao;
@@ -37,7 +41,7 @@ A3 = R*A3_o + Ao;
 s = 62;  %测量得 58.5mm + 6.5/2
 alpha = 0.12;
 beta = 0.1;
-gama = alpha;
+gama = -alpha;
 Z0 = 260;
 
 a = 41.56 %动平台外接圆半径 
@@ -55,17 +59,12 @@ result = []     %逆解求解出的结果
 
 %已知xyz坐标  求解要研究点的位姿 alpha beta gama
 
+
+
 % fun = @solve_fun;
 % x0 = [0.1,0.1,0.1];
 % [ang_argu] = fsolve(fun,x0)
 Pos = [];
-<<<<<<< HEAD
-PosR = 100
-CircNum = 8;     %迭代次数
-for i=1:CircNum
-    posX = PosR*cos((i-1)*pi/4);
-    posY = PosR*sin((i-1)*pi/4);
-=======
 PosR = 150;
 PosL = 100;
 
@@ -81,15 +80,11 @@ for i=1:CircNum
         posY = (PosL/2)*(-0.5*i+1.5);  
     end
    
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
     posZ = 260;
     Pos(i,:) =  [i posX posY posZ];
-%     gX0 = Pos(i,2);
-%     gY0 = Pos(i,3); 
-%     gZ0 = Pos(i,4);
-    gX0 = 20;
-    gY0 = 50; 
-    gZ0 = 260;
+    gX0 = Pos(i,2);
+    gY0 = Pos(i,3); 
+    gZ0 = Pos(i,4);
     fun = @solve_fun;
     x0 = [0.1,0.1,0.1];
     [ang_argu] = fsolve(fun,x0);
@@ -99,11 +94,11 @@ end
 for i=1:CircNum
     alpha = PosAng(i,5);
     beta = PosAng(i,6);    
-    gama = alpha;
+    gama = -alpha;
     Z0 = PosAng(i,4);
     X0 = (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy));   %论文结果 
     Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy));
-    alpha = gama;
+    alpha = -gama;
 
     q1 = eval(sqrt((B1-A1)'*(B1-A1)));    %q表示 P副长度 此时 B1点位于球铰中心 q的值是 
     q2 = eval(sqrt((B2-A2)'*(B2-A2)));    %球铰中心投影到移动副上的点与转动副之间的长度  B1点坐标需要修改
@@ -132,8 +127,8 @@ syms alpha beta  gama X0 Y0 Z0 q1 q2 q3
 X0 =  (b*uy*(3*vy-ux)+2*Z0*(vz*uy-vy*uz))/(2*(ux*vy-vx*uy))   %论文结果 
 Y0 = (b*ux*(ux-vy)-2*b*vx*uy+2*Z0*(uz*vx-vz*ux))/(2*(ux*vy-vx*uy))
 
-alpha = gama
-
+% alpha = -gama
+gama = -alpha;
 Ao = [X0;Y0;Z0]
 A1 = R*A1_o + Ao
 A2 = R*A2_o + Ao
@@ -141,9 +136,9 @@ A3 = R*A3_o + Ao
 
 
 f = [(B1-A1)'*(B1-A1);(B2-A2)'*(B2-A2);(B3-A3)'*(B3-A3)];
-argu = [alpha beta Z0];
+argu = [alpha beta Z0]
 J = []
-J = jacobian(f,argu);
+J = jacobian(f,argu)
 
 % J_1 = inv(J)
 % 开始数值运算  结构常数等进行赋值
@@ -156,34 +151,23 @@ diff3 = []; Jacobi3Cond = []; Jacobi3Det=[];
 diff_argu = [0 0 0];
 Jacobi3Inv = [];
 tic
-<<<<<<< HEAD
-for i=1:CircNum
-    q1 = 260.72; q2 = 308.5;  q3 =273.45;
-                  
-    alpha = -0.09376;
-    beta =0.077952;
-    gama = -0.09376;
-               
-    Z0 = 260;
-=======
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
-    alpha = PosAng(numm,5);
-    beta =PosAng(numm,6);
-    gama = alpha;
-    Z0 = 220;
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
+for i=1:2
+    q1 = 273.97; q2 = 260.78;  q3 = 259.11;
+    alpha = 0.08;
+    beta =0.2;
+    gama = -alpha;
+    Z0 = 230;
     argu = [alpha beta gama];
     Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
     
     num = 1;
     err3(numm,num) = 1;  err3_2(numm,num) = 1; diff3(numm,num,:) = [0 0 0]; Jacobi3Det(numm,num) = 0;Jacobi3Cond(numm,num) = 0; Jacobi3Inv(numm,num) = 0;
-    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<50 )
+    while((err3(numm,num)>1.0e-4 || err3_2(numm,num)>1.0e-4)&&num<5000 )
        argu = (argu + diff_argu);
        alpha = argu(1);
        beta = argu(2);
        Z0 = argu(3);
-       gama = alpha;
+       gama = -alpha;
        Fi = eval([-q1^2+(B1-A1)'*(B1-A1);-q2^2+(B2-A2)'*(B2-A2);-q3^2+(B3-A3)'*(B3-A3)]);
        diff_argu = (-inv(eval(J))*Fi)';
 
@@ -297,28 +281,21 @@ err6 = [];err6_2 = [];
 Jacobi6Det = []; Jacobi6Cond=[];diff6=[];
 Jacobi6Inv=[];Fi6=[]
 tic
-<<<<<<< HEAD
-for i=1:20
-   for j=1:10
-%     q1 = result(numm,2); q2 = result(numm,3);  q3 = result(numm,4);
-    q1 = 270; q2 = 240;  q3 = 260;
-=======
-for i=1:CircNum/2
-    q1 = PosAng(numm+5,2); q2 =PosAng(numm+5,3);  q3 = PosAng(numm+5,4);
-    alpha = PosAng(numm,5);
-    beta =PosAng(numm,6);
+for i=1:2
+     q1 = 273.97; q2 = 260.78;  q3 = 259.11;
+    alpha = 0.1;
+    beta =0.1;
     gama = alpha;
     Z0 = PosAng(numm,4);
     X0 = PosAng(numm,2);
     Y0 = PosAng(numm,3);
     argu = [alpha beta gama X0 Y0 Z0];
     
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
     Fi = eval(Fii);
     diff_argu = [0 0 0 0 0 0];
     num = 1;
     err6(numm,num)=1; err6_2(numm,num)=1;Jacobi6Det(numm,num)=0;Jacobi6Cond(numm,num)=0;diff6(numm,num,:)=[0 0 0 0 0 0];Jacobi6Inv(numm,num)=0;Fi6(num,num,:)=[0 0 0 0 0 0];
-    while((err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)&&num<50)
+    while((err6(numm,num)>1.0e-4 || err6_2(numm,num)>1.0e-4)&&num<500)
         argu = (argu + diff_argu);
         alpha = argu(1);
         beta = argu(2);
@@ -340,18 +317,9 @@ for i=1:CircNum/2
     end
     kineResult6(numm,:) = [numm q1 q2 q3 argu num];
     numm = numm+1
-<<<<<<< HEAD
-%     acos((X0^2+(Y0-b)^2+(Z0)^2-q1^2-a^2)/(-2*a*q1))
-%     acos(((X0+(3^(1/2)*b)/2)^2+(Y0+b/2)^2+(Z0)^2-q2^2-a^2)/(-2*a*q2))
-%     acos(((X0-(3^(1/2)*b)/2)^2+(Y0+b/2)^2+(Z0)^2-q3^2-a^2)/(-2*a*q3))
-   end
-=======
->>>>>>> c77c1c607a871e7aeb3a9fabf318a7e04047f974
 end
 time3 = toc
 kineResult6
-
-
 
 %% 画图
 % %x  y 的轨迹形状
